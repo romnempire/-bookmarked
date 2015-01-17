@@ -16,8 +16,15 @@ function getBookmarks(){
 	    }
 
 	    // print leaf nodes URLs to console
-	    if(node.url) { list = list + ' '  + node.url; }
+	    if(node.url){
+			currentNode = {'url':node.url, 'Name':node.title};
+		}
 	}
 }
 
-getBookmarks();
+function addBookmark(){
+	alert("You added a bookmark");
+}
+
+
+document.getElementById("addBookmark").addEventListener("click",function(){addBookmark();});
