@@ -5,6 +5,7 @@
 </head>
 <script>
 var onTags = [];
+var stringPopulatedTags = [];
 //tagcounts is an array of arrays.  the arrays hold the ids of images with a tag
 //the array size is the weight of the tag.
 var tagCounts = [];
@@ -81,21 +82,49 @@ var toggleTag = function toggleTag(tag) {
     }
 };
 
+var processString = function processString() {
+    if(stringPopulatedTags) {
+        for (loc in stringPopulatedTags) {
+            toggleTag(stringPopulatedTags[loc]);
+        } 
+    }
+    stringPopulatedTags = [];
+    //console.log('wiped');
+    var strings = $('#bar').val().split(' ');
+    for (loc in strings) {
+        if (tagCounts[strings[loc]] && (onTags.indexOf(strings[loc]) == -1)) {
+            stringPopulatedTags.push(strings[loc]);
+            onTags.push(strings[loc]);
+            $('#'+strings[loc]).css('background-color','lightgreen');
+        }
+    }
+}
+
 var gibWebpage = function gibWebpage() {
     var webpages = [];
+    //at this point the processtring listener will have taken care of teh url bar
     for (tag in onTags) {
         webpages = webpages.concat(tagCounts[onTags[tag]]);
     }
 
     //pick a random element from webpages
-    var ele = webpages[Math.floor((Math.random() * webpages.length))];
+    var rand = Math.floor((Math.random() * webpages.length));
+    console.log(rand);
+    var ele = webpages[rand];
+    console.log(ele);
     var site = data[ele].url;
     window.location = site;
 }
 
 
+
+
 $('document').ready(function() {
     populateTags();
+
+    $('#bar').on('keyup', function(){
+        processString();
+    });
 });
 </script>
 <body>
@@ -107,7 +136,7 @@ $('document').ready(function() {
 </span>
 
 <div id="searchbar" style="padding: 20px 20px 20px 20px; text-align:center">
-    <input type="search">
+    <input type="search" id="bar" placeholder="type tags here or click them" style="width:250px">
     <button type="button" onclick="gibWebpage()">I'm Feeling Lucky!</button>
 </div>
 </body>
