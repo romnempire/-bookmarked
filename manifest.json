@@ -12,6 +12,8 @@
   "permissions": [
     "activeTab",
     "bookmarks",
+    "tabs",
+    "storage",
     "https://ajax.googleapis.com/"
   ]
 }
