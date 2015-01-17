@@ -81,11 +81,10 @@ var gibWebpage = function gibWebpage() {
 	for (tag in onTags) {
 		webpages = webpages.concat(tagCounts[onTags[tag]]);
 	}
-
 	//pick a random element from webpages
 	var ele = webpages[Math.floor((Math.random() * webpages.length))];
 	var site = data[ele].url;
-	window.location = site;
+	chrome.tabs.create({ url: site });
 }
 
 
