@@ -60,4 +60,8 @@ function clearBookmarks(){
 
 document.getElementById("addBookmark").addEventListener("click",function(){addBookmark();});
 
+
+document.getElementById("viewBookmarks").addEventListener("click",function(){
+	chrome.tabs.create({ url: 'chrome-extension://' + chrome.runtime.id + "/tagview.html"});
+});
 document.getElementById("clearBookmarks").addEventListener("click",function(){clearBookmarks();});

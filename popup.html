@@ -1,7 +1,9 @@
 <html>
 <head>
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
+
 
 <body>
 
@@ -12,12 +14,19 @@
 </span>
 
 <div id="searchbar" style="padding: 20px 20px 20px 20px; text-align:center">
-    <input type="search">
-    <button type="button" id="feelingLucky" >I'm Feeling Lucky!</button>
-</div>
-<script src="thirdparty/jquery.js"></script>
-<script src="tagview.js"></script>
 
+    <input id="newTags" placeholder="Comma Separated Tags">
+    <br>
+    <button type="button" id="addBookmark">Add Bookmark</button>
+    <br>
+    <button type="button" id="clearBookmarks">Clear Bookmarks</button>
+    <br>
+    <button type="button" id="viewBookmarks">View Bookmarks</button>
+
+
+</div>
+
+<script src="thirdparty/jquery.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
