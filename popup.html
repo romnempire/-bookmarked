@@ -2,31 +2,34 @@
 <head>
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
+.styledbutton {
+width:100%; height:auto;background-color: #000000; color:#ffffff;
+border-style: solid; border-color:black; padding: 3px 3px 3px 3px; margin-bottom: 1px;
+}
+</style>
+
 </head>
 
 
-<body>
+<body style="background-color:lightgreen; height:200px">
 
-<span class="row text-center" style="padding: 50px 0px 0px 50px">
-    <div id="tagmap" class="col-md-10 col-md-offset-1">
 
+<div id="searchbar" style="text-align:center">
+
+    <div style="font-size:2em; padding:3px 3px 3px 3px"><b>#bookmarked</b></div>
+
+    <textarea id="newTags" style="width:100%; height:120px; text-align:left; text-wrap: unrestricted; word-wrap: break-word;" placeholder="Comma Separated Tags"></textarea>
+    <div style="position:absolute; bottom:0">
+    <!-- <br> -->
+    <button type="button" id="addBookmark" class='styledbutton' style="background-color:lightgreen; color:black">Add Bookmark</button>
+    <!-- <br> -->
+<!--     <button type="button" id="clearBookmarks" class='styledbutton' style="background-color:lightgreen; color:black">Clear Bookmarks</button> -->
+    <!-- <br> -->
+    
+    <button type="button" class='styledbutton' style="background-color:lightgreen; color:black" id="importBookmarks">Import Bookmarks</button>
+    <button type="button" id="viewBookmarks" class='styledbutton' style="border-color:black; margin-bottom: 0px; background-color: darkgray">View Bookmarks</button>
     </div>
-</span>
-
-<div id="searchbar" style="padding: 20px 20px 20px 20px; text-align:center">
-
-    <input id="newTags" placeholder="Comma Separated Tags">
-    <br>
-    <button type="button" id="addBookmark">Add Bookmark</button>
-    <br>
-    <button type="button" id="clearBookmarks">Clear Bookmarks</button>
-
-    <br>
-    <button type="button" id="viewBookmarks">View Bookmarks</button>
-    <br>
-    <button type="button" id="importBookmarks">Import Bookmarks</button>
-
-
 </div>
 
 <script src="thirdparty/jquery.js"></script>
