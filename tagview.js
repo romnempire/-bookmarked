@@ -174,7 +174,7 @@ function importBookmarks(){
             node.children.forEach(function(child) { processNode(child,test); });
         }
         else if(node.url){
-            currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":tagify(test)};
+            currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":tagify(test, node.title, node.url, id)};
             if(currentNode!=null){
                 allNodes[id]=currentNode;
             }
@@ -185,11 +185,39 @@ function importBookmarks(){
 
 }
 
-function tagify(tagArray){
+function tagify(tagArray, title, url, id){
     output = [];
     for(tag in tagArray) {
         output[tag] = tagArray[tag].replace(/\s+/g, '').replace(/[\[\]\/._]/g,'');
     }
+
+    //learn from cloud
+    if(id < 10) {
+         xmlhttp=new XMLHttpRequest();
+        urlstring = "https://www.wolframcloud.com/app/objects/ac8443b0-bfbd-4f0c-a58b-53330b24db43";
+        urlstring = urlstring+'?url='+url;
+        urlstring = urlstring+'&desc='+title.replace(/\s+/g, '+');
+
+        xmlhttp.onreadystatechange=function()
+          {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                console.log(xmlhttp.responseText);
+                allNodes[id].tags.push(xmlhttp.responseText);
+                chrome.storage.local.set({"bookmarks":allNodes},function(){
+                        //location.reload();
+                });
+                //return output;
+            //document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+            }
+          }
+
+        xmlhttp.open("GET",urlstring,true);
+        xmlhttp.send();
+       
+    }
+
+
     return output;
 }
 
