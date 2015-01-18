@@ -136,12 +136,67 @@ $('document').ready(function() {
 		populateTags();
 		document.getElementById("feelingLucky").addEventListener("click",function(){gibWebpage();});
 
+document.getElementById("clearTags").addEventListener("click",function(){clearBookmarks();});
+
+document.getElementById("importTags").addEventListener("click",function(){importBookmarks();});
 		$('#bar').on('keyup', function(){
 			processString();
 		});
 	});
 
 });
+
+
+function importBookmarks(){
+    var currentList = [];
+    var allNodes = [];
+    list = " ";
+    chrome.storage.local.get("max_id",function(result){
+        id = result['max_id'];
+        if(id==null){
+            id = 0;
+        }
+        chrome.bookmarks.getTree(function(itemTree){
+            itemTree.forEach(function(item){
+                processNode(item,[]);
+            });
+            chrome.storage.local.set({"max_id":id+1,"bookmarks":allNodes},function(){
+                    location.reload();
+            });
+        });
+    });
+
+    function processNode(node, inputTags) {
+        var test  = JSON.parse(JSON.stringify(inputTags));
+        // recursively process child nodes
+        if(node.children) {
+            test.push(node.title);
+            node.children.forEach(function(child) { processNode(child,test); });
+        }
+        else if(node.url){
+            currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":tagify(test)};
+            if(currentNode!=null){
+                allNodes[id]=currentNode;
+            }
+            id = id + 1;
+        }
+    }
+
+
+}
+
+function tagify(tagArray){
+    output = [];
+    for(tag in tagArray) {
+        output[tag] = tagArray[tag].replace(/\s+/g, '').replace(/[\[\]\/._]/g,'');
+    }
+    return output;
+}
+
+function clearBookmarks(){
+    chrome.storage.local.remove(['bookmarks','max_id'],function(){location.reload();})
+
+}
 
 $('body').keyup(function(event){
     console.log("key");
