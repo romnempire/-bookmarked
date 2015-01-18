@@ -55,7 +55,7 @@ var populateTags = function populateTags() {
 	}
 	var tag;
 	for(tag in tagCounts) {
-		var styleLine = "display: inline; padding: 5px 5px 5px 5px;";
+		var styleLine = "display: inline-block; padding: 5px 0px 0px 5px;";
 		//sizes tags to account for popularity
 		if (tagCounts[tag]	.length >= 100) {
 			styleLine += "font-size: 4em";
@@ -66,9 +66,10 @@ var populateTags = function populateTags() {
 		}  else if (tagCounts[tag].length >= 5) {
 			styleLine += "font-size: 1.25em";
 		}
-
-		$('#tagmap').append('<div id="'+ tag +'" style="'+ styleLine+'">#'+tag+'</div>');
-		$("#"+tag).click(function(){toggleTag(this.id)});
+        if(tag !== "") {
+            $('#tagmap').append('<div id="'+ tag +'" style="'+ styleLine+'">#'+tag+'</div>');
+            $("#"+tag).click(function(){toggleTag(this.id)});
+        }
 	}
 };
 
@@ -104,10 +105,17 @@ var gibWebpage = function gibWebpage() {
 	var tag;
 	webpages = [];
 	//at this point the processtring listener will have taken care of teh url bar
-	for (tag in onTags) {
-		console.log(tag);
-		webpages = webpages.concat(tagCounts[onTags[tag]]);
-	}
+    if(onTags.length > 0) {
+        for (tag in onTags) {
+            console.log(tag);
+            webpages = webpages.concat(tagCounts[onTags[tag]]);
+        }
+    } else {
+        for (tag in tagCounts) {
+            webpages = webpages.concat(tagCounts[tag]);
+        }
+    }
+
 	//pick a random element from webpages
 	var rand = Math.floor((Math.random() * webpages.length));
 	console.log(rand);
@@ -133,4 +141,13 @@ $('document').ready(function() {
 		});
 	});
 
+});
+
+$('body').keyup(function(event){
+    console.log("key");
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        gibWebpage();  
+    }
+ 
 });

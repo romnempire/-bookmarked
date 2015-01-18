@@ -26,13 +26,21 @@ function importBookmarks(){
 	        node.children.forEach(function(child) { processNode(child,test); });
 	    }
 	    else if(node.url){
-			currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":test};
+			currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":tagify(test)};
 			if(currentNode!=null){
 				allNodes[id]=currentNode;
 			}
 			id = id + 1;
 		}
 	}
+}
+
+function tagify(tagArray){
+    output = [];
+    for(tag in tagArray) {
+        output[tag] = tagArray[tag].replace(/\s+/g, '').replace(/[\[\]\/._]/g,'');
+    }
+    return output;
 }
 
 function addBookmark(){
