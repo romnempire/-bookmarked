@@ -38,17 +38,16 @@ var data = {
 };
 
 var populateTags = function populateTags() {
-	data = JSON.parse(data);
-	$("#tagmap").html(data);
-	alert(data);
 	for(bookmark in data) {
-		for(tag in data[bookmark].tags) {
-			if(tagCounts[data[bookmark].tags[tag]]) {
-				tagCounts[data[bookmark].tags[tag]].push(bookmark);
-			} else {
-				tagCounts[data[bookmark].tags[tag]] = [bookmark];
-			}
+		if(data[bookmark]!=null){
+			for(tag in data[bookmark].tags) {
+				if(tagCounts[data[bookmark].tags[tag]]) {
+					tagCounts[data[bookmark].tags[tag]].push(bookmark);
+				} else {
+					tagCounts[data[bookmark].tags[tag]] = [bookmark];
+				}
 
+			}
 		}
 	}
 	for(tag in tagCounts) {
@@ -118,10 +117,10 @@ var gibWebpage = function gibWebpage() {
 
 
 $('document').ready(function() {
-	chrome.storage.sync.get('bookmarks',function(result){
+	chrome.storage.local.get('bookmarks',function(result){
+		console.log(data);
 		data = result['bookmarks'];
-		alert(typeof {"HI":"NO"});
-		alert(typeof(data));
+		$("#tagmap").html(data);
 		populateTags();
 		document.getElementById("feelingLucky").addEventListener("click",function(){gibWebpage();});
 
