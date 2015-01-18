@@ -18,14 +18,15 @@ function importBookmarks(){
 		});
 	});
 
-	function processNode(node,tags) {
+	function processNode(node, inputTags) {
+		var test  = JSON.parse(JSON.stringify(inputTags));
 	    // recursively process child nodes
 	    if(node.children) {
-			tags.push(node.title);
-	        node.children.forEach(function(child) { processNode(child,tags); });
+			test.push(node.title);
+	        node.children.forEach(function(child) { processNode(child,test); });
 	    }
 	    else if(node.url){
-			currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":tags};
+			currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":test};
 			if(currentNode!=null){
 				allNodes[id]=currentNode;
 			}

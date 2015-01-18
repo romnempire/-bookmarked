@@ -1,5 +1,6 @@
 var onTags = [];
 var stringPopulatedTags = [];
+var webpages = [];
 //tagcounts is an array of arrays.  the arrays hold the ids of images with a tag
 //the array size is the weight of the tag.
 var tagCounts = [];
@@ -38,8 +39,10 @@ var data = {
 };
 
 var populateTags = function populateTags() {
+
 	for(bookmark in data) {
 		if(data[bookmark]!=null){
+			var tag;
 			for(tag in data[bookmark].tags) {
 				if(tagCounts[data[bookmark].tags[tag]]) {
 					tagCounts[data[bookmark].tags[tag]].push(bookmark);
@@ -50,11 +53,11 @@ var populateTags = function populateTags() {
 			}
 		}
 	}
+	var tag;
 	for(tag in tagCounts) {
-		console.log(tagCounts);
 		var styleLine = "display: inline; padding: 5px 5px 5px 5px;";
 		//sizes tags to account for popularity
-		if (tagCounts[tag].length >= 100) {
+		if (tagCounts[tag]	.length >= 100) {
 			styleLine += "font-size: 4em";
 		} else if (tagCounts[tag].length >= 10) {
 			styleLine += "font-size: 2em";
@@ -98,12 +101,13 @@ var processString = function processString() {
 }
 
 var gibWebpage = function gibWebpage() {
-	var webpages = [];
+	var tag;
+	webpages = [];
 	//at this point the processtring listener will have taken care of teh url bar
 	for (tag in onTags) {
+		console.log(tag);
 		webpages = webpages.concat(tagCounts[onTags[tag]]);
 	}
-
 	//pick a random element from webpages
 	var rand = Math.floor((Math.random() * webpages.length));
 	console.log(rand);
@@ -119,8 +123,8 @@ var gibWebpage = function gibWebpage() {
 $('document').ready(function() {
 	chrome.storage.local.get('bookmarks',function(result){
 		console.log(data);
+		olddata = data;
 		data = result['bookmarks'];
-		$("#tagmap").html(data);
 		populateTags();
 		document.getElementById("feelingLucky").addEventListener("click",function(){gibWebpage();});
 
