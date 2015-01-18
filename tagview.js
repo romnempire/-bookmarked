@@ -1,4 +1,5 @@
 var onTags = [];
+var stringPopulatedTags = [];
 //tagcounts is an array of arrays.  the arrays hold the ids of images with a tag
 //the array size is the weight of the tag.
 var tagCounts = [];
@@ -37,7 +38,9 @@ var data = {
 };
 
 var populateTags = function populateTags() {
-
+	data = JSON.parse(data);
+	$("#tagmap").html(data);
+	alert(data);
 	for(bookmark in data) {
 		for(tag in data[bookmark].tags) {
 			if(tagCounts[data[bookmark].tags[tag]]) {
@@ -61,6 +64,7 @@ var populateTags = function populateTags() {
 		}  else if (tagCounts[tag].length >= 5) {
 			styleLine += "font-size: 1.25em";
 		}
+
 		$('#tagmap').append('<div id="'+ tag +'" style="'+ styleLine+'">#'+tag+'</div>');
 		$("#"+tag).click(function(){toggleTag(this.id)});
 	}
@@ -76,24 +80,54 @@ var toggleTag = function toggleTag(tag) {
 	}
 };
 
+var processString = function processString() {
+	if(stringPopulatedTags) {
+		for (loc in stringPopulatedTags) {
+			toggleTag(stringPopulatedTags[loc]);
+		}
+	}
+	stringPopulatedTags = [];
+	//console.log('wiped');
+	var strings = $('#bar').val().split(' ');
+	for (loc in strings) {
+		if (tagCounts[strings[loc]] && (onTags.indexOf(strings[loc]) == -1)) {
+			stringPopulatedTags.push(strings[loc]);
+			onTags.push(strings[loc]);
+			$('#'+strings[loc]).css('background-color','lightgreen');
+		}
+	}
+}
+
 var gibWebpage = function gibWebpage() {
 	var webpages = [];
+	//at this point the processtring listener will have taken care of teh url bar
 	for (tag in onTags) {
 		webpages = webpages.concat(tagCounts[onTags[tag]]);
 	}
+
 	//pick a random element from webpages
-	var ele = webpages[Math.floor((Math.random() * webpages.length))];
+	var rand = Math.floor((Math.random() * webpages.length));
+	console.log(rand);
+	var ele = webpages[rand];
+	console.log(ele);
 	var site = data[ele].url;
-	chrome.tabs.create({ url: site });
+	window.location = site;
 }
 
 
+
+
 $('document').ready(function() {
+	chrome.storage.sync.get('bookmarks',function(result){
+		data = result['bookmarks'];
+		alert(typeof {"HI":"NO"});
+		alert(typeof(data));
+		populateTags();
+		document.getElementById("feelingLucky").addEventListener("click",function(){gibWebpage();});
 
-	document.getElementById("feelingLucky").addEventListener("click",function(){
-		gibWebpage();
+		$('#bar').on('keyup', function(){
+			processString();
+		});
 	});
-
-	populateTags();
 
 });

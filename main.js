@@ -16,7 +16,12 @@ function importBookmarks(){
 	    }
 
 	    if(node.url){
-			currentNode = {'id':1, 'url':node.url, 'Name':node.title, "tags":['a','b','c']};
+			chrome.storage.sync.get("max_id",function(result){
+				id = result['max_id']
+				currentNode = {'id':id, 'url':node.url, 'Name':node.title, "tags":['a','b','c']};
+				chrome.storage.sync.set({"max_id":id+1},function(){});
+			});
+
 		}
 	}
 }
